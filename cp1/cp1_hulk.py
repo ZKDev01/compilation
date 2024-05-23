@@ -20,7 +20,8 @@ elemental_functions = {
 }
 
 if __name__ == "__main__":  
-  eval = operations['*']
-  eval = eval(constants['pi'],2)
-  print(eval)
-  pass
+  op = operations['*']
+  op = op(constants['pi'],2)
+  print("testing con lambda operation: ", op)
+  
+  print("testing con function eval: ", eval( '3 + 2 * 2' ))
