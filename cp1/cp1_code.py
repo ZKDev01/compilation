@@ -76,12 +76,14 @@ def parse_term(tokens, i):
   Returns:
       _type_: expression and analyzed tokens 
   """
+
+  # TODO: este metodo para lograr un orden a la hora de la evaluacion, primero reconociendo las funciones elementales y modificar los tokens evaluando primero las funciones elementales
   term, typedef = order_evaluate(tokens)
   if typedef == 'ef':
     pass
-  if typedef == 'op':
-    pass
+  
 
+  # TODO: luego de evaluar las funciones elementales usar 'eval()' para evaluar la expresion 
   # HASTA AQUI EVALUA
   term = tokens[i]
   left_value = tokens[i-1]

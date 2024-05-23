@@ -29,6 +29,7 @@ def find_parentheses_index(tokens: list):
       break
   return (last_open != -1 and first_close != -1), last_open, first_close
 def order_evaluate(tokens: list):
+  # TODO: la funcion debe ser capaz de identificar la lista de funciones elementales y devolver su funcion lambda, sino, devolver que solo quedan o operadores o no queda nada
   if any(value for key, value in elemental_functions.items() if key in tokens):
     return next(iter( [key for key in elemental_functions.keys() if key in tokens] ), None)
   return None
