@@ -11,7 +11,7 @@ constants = {
   'e': 2.71828182846,
   'phi': 1.61803398875,
 }
-functions = {
+elemental_functions = {
   'sin': lambda x: math.sin(x),
   'cos': lambda x: math.cos(x),
   'tan': lambda x: math.tan(x),
@@ -19,13 +19,8 @@ functions = {
   'sqrt': lambda x: math.sqrt(x),
 }
 
-if __name__ == "__main__":
-  item = 'pi'
-  print(item in constants)
-  print(constants[item])
-
-  for item in constants:
-    text = f"""
-    item: {item}
-    """
-    # print(text)
+if __name__ == "__main__":  
+  eval = operations['*']
+  eval = eval(constants['pi'],2)
+  print(eval)
+  pass
