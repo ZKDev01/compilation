@@ -1,4 +1,4 @@
-import cmp.visitor as visitor
+import tools.cmp.visitor as visitor
 
 class Node:
     pass
