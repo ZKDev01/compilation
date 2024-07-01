@@ -226,7 +226,7 @@ def distinguish_states(group: list[DisjointNode], automaton: NFA, partition: Dis
       split[destinations] = [state]     
 
   return [ group for group in split.values()]
-            
+
 def state_minimization(automaton: NFA):
   partition = DisjointSet(*range(automaton.states))
     
@@ -285,3 +285,8 @@ def automata_minimization(automaton: NFA):
   #start = [states.index(group[0].value) for group in partition.groups if automaton.start in group][0]
     
   return DFA(len(states), finals, transitions, start)
+
+
+
+
+

@@ -1,4 +1,8 @@
+from tools.cmp.pycompiler import Grammar, Sentence
+from tools.cmp.utils import ContainerSet
+
 from tools.automata import NFA, DFA, automata_union, automata_concatenation, automata_closure, nfa_to_dfa, state_minimization, distinguish_states, automata_minimization
+from tools.parsers import compute_firsts, compute_follows, build_parsing_table_LL1_parser
 
 def testing_automata():
   
@@ -109,7 +113,7 @@ def testing_automata():
     assert automaton.states == states
     test_recognize(automaton=automaton, valid_list=valid_list, notvalid_list=notvalid_list)
 
-  # CASE TEST
+  # CALL TEST
   test_recognize(automaton=automaton_dfa_1, 
     valid_list=['ba','aababbaba'], 
     notvalid_list=['', 'aabaa', 'aababb'])
@@ -162,11 +166,76 @@ def testing_automata():
     valid_list=['ababbaabb','abb'],
     notvalid_list=['','ab','aaaaa','bbbbb','abbabababa'])
 
+def testing_parsers():
+
+  # DEF TESTING-GRAMMAR
+  G1 = Grammar()
+  S = G1.NonTerminal('S', True)
+  A,B = G1.NonTerminals('A B')
+  a,b = G1.Terminals('a b')
+
+  S %= A + B
+  A %= a + A | a
+  B %= b + B | b
+  
+  # DEF TEST
+  def test_compute_first(G: Grammar, results: set):
+    first = compute_firsts(G=G)
+    assert first == results
+
+  def test_compute_follows(G: Grammar, results: set):
+    first = compute_firsts(G=G)
+    follows = compute_follows(G=G, firsts=first)
+    assert follows == results
+
+  # DEF PRINTS
+  def print_parsing_table_LL1(G: Grammar):
+    firsts = compute_firsts(G=G)
+    follows = compute_follows(G=G, firsts=firsts)
+    table = build_parsing_table_LL1_parser(G=G, firsts=firsts, follows=follows)
+    return table
+
+  # CALL TEST
+  test_compute_first(G=G1,
+    results= {
+      a: ContainerSet(a , contains_epsilon=False),
+      b: ContainerSet(b , contains_epsilon=False),
+      S: ContainerSet(a , contains_epsilon=False),
+      A: ContainerSet(a , contains_epsilon=False),
+      B: ContainerSet(b , contains_epsilon=False),
+      Sentence(A, B): ContainerSet(a , contains_epsilon=False),
+      Sentence(a, A): ContainerSet(a , contains_epsilon=False),
+      Sentence(a): ContainerSet(a , contains_epsilon=False),
+      Sentence(b, B): ContainerSet(b , contains_epsilon=False),
+      Sentence(b): ContainerSet(b , contains_epsilon=False) })
+  
+  test_compute_follows(G=G1,
+    results= { 
+      S: ContainerSet(G1.EOF , contains_epsilon=False),
+      A: ContainerSet(b , contains_epsilon=False),
+      B: ContainerSet(G1.EOF , contains_epsilon=False) 
+    })
+  
+  # CALL PRINTS
+  print( f"Grammar: {G1}" )
+  print( "PARSING TABLE LL1" )
+  print( print_parsing_table_LL1(G=G1) )
+
+def testing_regex():
+
+  
+
+  pass
+
 
 def main() -> None:
   testing_automata()
+  testing_parsers()
 
-  print("ALL TEST - OK!")
 
 if __name__ == '__main__':
+  print("================= TESTING ===================")
+
   main()
+  
+  print("==================== OK =====================")
