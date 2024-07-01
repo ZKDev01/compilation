@@ -18,10 +18,6 @@ Las expresiones regulares son un poderoso instrumento utilizado en programación
 
 Las expresiones regulares permiten definir patrones que corresponden a los tokens, facilitando la identificación precisa de cada token en el código fuente. Además, las expresiones regulares son flexibles y potentes, permitiendo describir complejos patrones de texto. 
 
-### Autómatas 
-- Algoritmo de Thompson 
-- Algoritmo de Powerset
-
 ## Gramática y Parser
 ### Parser LR(1) 
 
