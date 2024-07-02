@@ -1,7 +1,6 @@
 from tools.cmp.utils import ContainerSet, DisjointSet, DisjointNode
 
 class NFA:
-
   def __init__(self, 
       states: int, 
       finals: list[int], 
