@@ -139,7 +139,7 @@ close_square_braket = G.Terminal(']')
 #region
 
 #<program> -> <instr-list>
-program %= program_level_decl_list, lambda h,s: ProgramNode(s[1]) #TODO
+program %= program_level_decl_list, lambda h,s: ProgramNode(s[1]) #TODO verificar
 
 program_level_decl_list%= instr_wrapper, lambda h,s: [s[1]]
 program_level_decl_list %= program_level_decl + program_level_decl_list, lambda h,s: [s[1]] + s[2]
