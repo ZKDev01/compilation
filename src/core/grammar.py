@@ -166,7 +166,7 @@ instr %= var_dec, lambda h,s: s[1]
 
 #var declaration 
 #<var-dec> -> let <var-init-list> in <var-decl-expression> 
-var_dec %= let + var_init_list + in_ + var_decl_exp, lambda h,s: VarsDeclarationsListNode(s[2], s[4])
+var_dec %= let + var_init_list + in_ + var_decl_exp, lambda h,s: VarsDeclListNode(s[2], s[4])
 
 #var declaration expression 
 # <var-decl-expression> -> <scope> | <flux-control> | <var-decl> | <expression> | (<var-dec>)
@@ -183,7 +183,7 @@ var_init_list %= var_init + comma + var_init_list, lambda h,s: [s[1]] + s[3]
 
 #var initialization 
 # <var-init> -> ID = <expression> | ID = <var-asign>
-var_init %= var_id + inicialization + exp, lambda h,s: lambda h,s: VarDeclarationNode(s[1], s[3])
+var_init %= var_id + inicialization + exp, lambda h,s: lambda h,s: VarDeclNode(s[1], s[3])
 
 # #id list 
 # <id-list> -> <identifier> | <identifier>, <id-list>
@@ -257,18 +257,18 @@ atom %= boolean_value, lambda h,s: s[1]
 # string_atom %= open_curly_braket + string_operation + closed_curly_braket
 
 #variable asignation <var-asignation> ->  <var-use> := <expression>
-var_asign %= var_use + asignation + exp, lambda h,s: VarAssignation(s[1], s[3])
+var_asign %= var_use + asignation + exp, lambda h,s: VarAssign(s[1], s[3])
 # var_asignation %= var_use + asignation + var_asignation
 
 #function declaration <function-declaration> -> <func-inline-declaration> | <func-full-dec>
 
-func_decl %= func_decl_id + open_par + id_list + closed_par + function_full_declaration, lambda h,s: FuncFullDeclarationNode(s[1], s[3], s[5])
-func_decl %= func_decl_id + open_par + closed_par + function_full_declaration, lambda h,s: FuncFullDeclarationNode(s[1], [], s[4])
-func_decl %= func_decl_id + open_par + id_list + closed_par + function_full_declaration + semicolon, lambda h,s: FuncFullDeclarationNode(s[1], s[3], s[5])
-func_decl %= func_decl_id + open_par + closed_par + function_full_declaration + semicolon, lambda h,s: FuncFullDeclarationNode(s[1], [], s[4])
+func_decl %= func_decl_id + open_par + id_list + closed_par + function_full_declaration, lambda h,s: FuncFullDeclNode(s[1], s[3], s[5])
+func_decl %= func_decl_id + open_par + closed_par + function_full_declaration, lambda h,s: FuncFullDeclNode(s[1], [], s[4])
+func_decl %= func_decl_id + open_par + id_list + closed_par + function_full_declaration + semicolon, lambda h,s: FuncFullDeclNode(s[1], s[3], s[5])
+func_decl %= func_decl_id + open_par + closed_par + function_full_declaration + semicolon, lambda h,s: FuncFullDeclNode(s[1], [], s[4])
 
-func_decl %= func_decl_id+open_par +id_list+ closed_par + function_inline_declaration, lambda h,s: FuncInlineDeclarationNode(s[1], s[3], s[5])
-func_decl %= func_decl_id+open_par + closed_par + function_inline_declaration, lambda h,s: FuncInlineDeclarationNode(s[1], [], s[4])
+func_decl %= func_decl_id+open_par +id_list+ closed_par + function_inline_declaration, lambda h,s: FuncInlineDeclNode(s[1], s[3], s[5])
+func_decl %= func_decl_id+open_par + closed_par + function_inline_declaration, lambda h,s: FuncInlineDeclNode(s[1], [], s[4])
 
 func_decl_id %= function + ID, lambda h,s: s[2]
 
@@ -337,11 +337,11 @@ boolean_value %= false, lambda h,s: BooleanNode(s[1])
 
 #type declaration 
 # <type-declaration> -> <type-declaration> -> type + <constructor> + <decl-body> | type<constructor>inherits <constructor><decl-body>
-type_declaration %= type + ID + constructor + decl_body, lambda h,s: TypeDeclarationNode(s[2], s[3], s[4])
+type_declaration %= type + ID + constructor + decl_body, lambda h,s: TypeDeclNode(s[2], s[3], s[4])
 
-type_declaration %= type + ID + constructor + inherits_type + decl_body, lambda h,s: TypeDeclarationNode(s[2], s[3], s[5], s[4])
-type_declaration %= type + ID + constructor + decl_body + semicolon, lambda h,s: TypeDeclarationNode(s[2], s[3], [])
-type_declaration %= type + ID + constructor + inherits_type + decl_body + semicolon, lambda h,s: TypeDeclarationNode(s[2], s[3], s[5], s[4])
+type_declaration %= type + ID + constructor + inherits_type + decl_body, lambda h,s: TypeDeclNode(s[2], s[3], s[5], s[4])
+type_declaration %= type + ID + constructor + decl_body + semicolon, lambda h,s: TypeDeclNode(s[2], s[3], [])
+type_declaration %= type + ID + constructor + inherits_type + decl_body + semicolon, lambda h,s: TypeDeclNode(s[2], s[3], s[5], s[4])
 
 #constructor 
 # <constructor> -> ID | ID()
@@ -368,15 +368,15 @@ declaration %= method_declaration, lambda h,s: s[1]
 
 #atribute declaration 
 # <atribute-declaration> -> ID = <expression>
-atribute_declaration %= var_id + inicialization + exp, lambda h,s: AttrDeclarationNode(s[1], None, s[3])
+atribute_declaration %= var_id + inicialization + exp, lambda h,s: AttrDeclNode(s[1], None, s[3])
 
 #method declaration 
 # <method-declaration>-> ID (<params>) => <expression> | ID (<params>) => { <inst-list> } 
-method_declaration %= ID + open_par + id_list + closed_par + func_arrow + exp, lambda h,s: FuncInlineDeclarationNode(s[1], s[3], s[6])
-method_declaration %= ID + open_par + id_list + closed_par + function_full_declaration, lambda h,s: FuncFullDeclarationNode(s[1], s[3], s[5])
+method_declaration %= ID + open_par + id_list + closed_par + func_arrow + exp, lambda h,s: FuncInlineDeclNode(s[1], s[3], s[6])
+method_declaration %= ID + open_par + id_list + closed_par + function_full_declaration, lambda h,s: FuncFullDeclNode(s[1], s[3], s[5])
 
-method_declaration %= ID + open_par + closed_par + func_arrow + exp, lambda h,s: FuncInlineDeclarationNode(s[1], [], s[5])
-method_declaration %= ID + open_par + closed_par + function_full_declaration, lambda h,s: FuncFullDeclarationNode(s[1], [], s[4])
+method_declaration %= ID + open_par + closed_par + func_arrow + exp, lambda h,s: FuncInlineDeclNode(s[1], [], s[5])
+method_declaration %= ID + open_par + closed_par + function_full_declaration, lambda h,s: FuncFullDeclNode(s[1], [], s[4])
 
 #function call 
 # <func-call> -> ID(<param-list>) | ID()
@@ -396,7 +396,7 @@ param_list %= param + comma + param_list, lambda h,s: [s[1]] + s[3]
 param %= exp, lambda h,s: s[1]
 
 #var use <var-use> -> Id | <variable-atribute>
-var_use %= ID, lambda h,s: VariableNode(s[1])
+var_use %= ID, lambda h,s: VarNode(s[1])
 var_use %= atom + open_square_braket + exp + close_square_braket, lambda h,s: VecInstNode(s[1], s[3])
 var_use %= var_attr, lambda h,s: s[1]
 
@@ -447,7 +447,5 @@ vector %= open_square_braket + vector_decl + close_square_braket, lambda h,s: Ve
 #vector declaration
 vector_decl %= param_list, lambda h,s: s[1]
 vector_decl %= exp + gen_pattern_symbol + var_id + in_ + exp, lambda h,s: VecDecImplSyntaxNode(s[1], s[3], s[5])
-
-
 
 #endregion
