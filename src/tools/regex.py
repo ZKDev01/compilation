@@ -1,10 +1,13 @@
-from cmp.pycompiler import Grammar
-from cmp.utils import Token
-from cmp.ast import *
-from evaluate import evaluate_parse
+from tools.cmp.pycompiler import Grammar, EOF
+from tools.cmp.utils import Token
+from tools.cmp.ast import *
 
 from parsers import LR1Parser, LL1Parser, evaluate_reverse_parse
 from automata import NFA, nfa_to_dfa, automata_minimization, automata_concatenation, automata_closure, automata_union
+
+
+
+
 
 class EpsilonNode(AtomicNode):
   def evaluate(self):
