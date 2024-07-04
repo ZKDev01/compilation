@@ -1,6 +1,6 @@
-from cmp.pycompiler import *
-from cmp.automata import State, lr0_formatter, multiline_formatter
-from cmp.utils import ContainerSet
+from tools.cmp.pycompiler import *
+from tools.cmp.automata import State, lr0_formatter, multiline_formatter
+from tools.cmp.utils import ContainerSet
 
 def compute_local_first(firsts, alpha):
   first_alpha = ContainerSet()
@@ -168,9 +168,10 @@ def build_LR1_automaton(G: Grammar) -> State:
 class LL1Parser():
   def __init__(self, G):
     self.G = G
+    self.M: dict[(NonTerminal, Terminal), Production] = {}
     self.firsts = compute_firsts(self.G)
     self.follows = compute_follows(self.G, self.firsts)
-    self.M = self._build_parsing_table()
+    self._build_parsing_table()
 
   def _build_parsing_table(self):
     G = self.G
@@ -213,7 +214,7 @@ class LL1Parser():
                 break
             cursor += 1
         else:
-            production = M[(top,a)][0]
+            [production, ] = M[top,a]
             output.append(production)
             production = list(production.Right)
             stack.extend(production[::-1])
@@ -299,9 +300,6 @@ def goto_lr1(items, symbol: Symbol, firsts: dict[Sentence:ContainerSet] = None, 
   assert just_kernel or firsts is not None, '`firsts` must be provided if `just_kernel=False`'
   items = frozenset(item.NextItem() for item in items if item.NextSymbol == symbol)
   return items if just_kernel else LR1Parser.closure_lr1(items, firsts)
-
-
-
 
 
 class ShiftReduceParser:
