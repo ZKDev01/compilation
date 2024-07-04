@@ -1,7 +1,6 @@
-from tools.cmp.utils import ContainerSet, DisjointSet, DisjointNode
+from cmp.utils import ContainerSet, DisjointSet, DisjointNode
 
 class NFA:
-
   def __init__(self, 
       states: int, 
       finals: list[int], 
@@ -89,7 +88,7 @@ class DFA(NFA):
         return False
     return self.current in self.finals
 
-def nfa_to_dfa(automaton: NFA):
+def nfa_to_dfa(automaton: NFA) -> DFA:
   transitions = {}
     
   start = automaton.epsilon_closure([automaton.start])
@@ -184,7 +183,7 @@ def automata_concatenation(a1: NFA, a2: NFA) -> NFA:
     
   return NFA(states, finals, transitions, start)
 
-def automata_closure(a1: NFA):
+def automata_closure(a1: NFA) -> NFA:
   transitions = {}
     
   start = 0
@@ -229,8 +228,7 @@ def distinguish_states(group: list[DisjointNode], automaton: NFA, partition: Dis
 
 def state_minimization(automaton: NFA):
   partition = DisjointSet(*range(automaton.states))
-    
-  ## partition = { NON-FINALS | FINALS }
+  
   finals = automaton.finals
   non_finals = [state for state in range(automaton.states) if state not in finals]
 
@@ -239,8 +237,7 @@ def state_minimization(automaton: NFA):
 
   while True:
     new_partition = DisjointSet(*range(automaton.states))
-        
-    # Split each group if needed (use distinguish_states(group, automaton, partition))
+    
     for group in partition.groups:
       new_groups = distinguish_states(group,automaton,partition)
 
@@ -260,7 +257,7 @@ def automata_minimization(automaton: NFA):
     
   transitions = {}
   for i, state in enumerate(states):
-    ## origin = ???
+    
     origin = state
 
     for symbol, destinations in automaton.transitions[origin].items():
@@ -274,8 +271,6 @@ def automata_minimization(automaton: NFA):
       except KeyError:
         transitions[i,symbol] = new_destination
     
-  ## finals = ???
-  ## start  = ???
   finals = [states.index(state) for state in states if state in automaton.finals]
   for group in partition.groups:
     for member in group:

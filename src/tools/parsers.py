@@ -1,6 +1,6 @@
-from tools.cmp.pycompiler import *
-from tools.cmp.automata import State, lr0_formatter, multiline_formatter
-from tools.cmp.utils import ContainerSet
+from cmp.pycompiler import *
+from cmp.automata import State, lr0_formatter, multiline_formatter
+from cmp.utils import ContainerSet
 
 def compute_local_first(firsts, alpha):
   first_alpha = ContainerSet()
@@ -165,25 +165,61 @@ def build_LR1_automaton(G: Grammar) -> State:
   automaton.set_formatter(multiline_formatter)
   return automaton
 
-def build_parsing_table_LL1_parser(G: Grammar, firsts, follows):
-  M = {}
+class LL1Parser():
+  def __init__(self, G):
+    self.G = G
+    self.firsts = compute_firsts(self.G)
+    self.follows = compute_follows(self.G, self.firsts)
+    self.M = self._build_parsing_table()
 
-  for production in G.Productions:
-    X = production.Left
-    alpha = production.Right
+  def _build_parsing_table(self):
+    G = self.G
+    firsts = compute_firsts(G)
+    follows = compute_follows(G, firsts)
+    M = {} # [NonTerminal, Terminal] -> [Production]
     
-    for terminal in G.terminals:
-      if terminal in firsts[alpha].set:
-        M[X,terminal] = [production]
+    for production in G.Productions:
+        X = production.Left
+        alpha = production.Right
+        
+        if not alpha.IsEpsilon:
+            for first in firsts[alpha]:
+                if (X, first) in M:
+                    raise Exception(f'The grammar is not LL(1) because the pair({X}, {first}) has already asociated the production {M[X, first]} and want assign the production {production}')
+                M[X, first] = [production, ]
+        else:
+            for follow in follows[X]:
+                if (X, follow) in M:
+                    raise Exception('La gramatica no es LL(1)')
+                M[X, follow] = [production, ]
+    self.M = M
+
+  def __call__(self, w: list[Symbol]):
+    G, M = self.G, self.M
+
+    stack =  [G.EOF, G.startSymbol]
+    cursor = 0
+    output = []
     
-    if firsts[alpha].contains_epsilon:
-      for terminal in G.terminals:
-        if terminal in follows[X].set:
-          M[X,terminal] = [production]
-      if G.EOF in follows[X].set:
-        M[X,G.EOF] = [production]
-    
-  return M            
+    while True:
+        top = stack.pop()
+        a = w[cursor]
+        
+        if top.IsEpsilon:
+            pass
+        elif top.IsTerminal:
+            assert top == a
+            if top == G.EOF:
+                break
+            cursor += 1
+        else:
+            production = M[(top,a)][0]
+            output.append(production)
+            production = list(production.Right)
+            stack.extend(production[::-1])
+
+    return output
+           
 
 def evaluate_reverse_parse(right_parse, operations, tokens):
   if not right_parse or not operations or not tokens:

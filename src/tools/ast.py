@@ -28,9 +28,9 @@ class StatementNode(Node):
     def __str__(self):
         return "<StatementNode>"
 
-class ExpNode(Node):
+class ExpressionNode(Node):
     def __str__(self):
-        return "<ExpNode>"
+        return "<ExpressionNode>"
 
 class VarsDeclListNode(StatementNode):
     def __init__(self, decls, body):
@@ -124,26 +124,26 @@ class AttrDeclNode(StatementNode):
         return self.expr.typeof()
     
 
-class VecDecExplSyntaxNode(StatementNode):
+class VecDeclExplSyntaxNode(StatementNode):
     def __init__(self, args):
         self.args = args
     def __str__(self):
-        return f"<VecDecExplSyntaxNode> {str(self.args)}"
+        return f"<VecDeclExplSyntaxNode> {str(self.args)}"
 
     def type_of(self):
         return "Vector"
-class VecDecImplSyntaxNode(ExpNode):
+class VecDeclImplSyntaxNode(ExpressionNode):
     def __init__(self, expr, var, in_):
         self.expr = expr
         self.var = var
         self.in_ = in_
     def __str__(self):
-        return "<VecDecImplSyntaxNode>"
+        return "<VecDeclImplSyntaxNode>"
 
     def type_of(self):
         return "Vector"
 
-class VecInstNode(ExpNode):
+class VecInstNode(ExpressionNode):
     def __init__(self, var, index):
         self.var = var
         self.index = index
@@ -152,7 +152,7 @@ class VecInstNode(ExpNode):
 
     def type_of(self):
         return "Vector"
-class ProtocolNode(ExpNode):
+class ProtocolNode(ExpressionNode):
     def __init__(self, idx, methods, extends=None):
         self.id = idx
         self.extends = extends
@@ -160,7 +160,7 @@ class ProtocolNode(ExpNode):
     def __str__(self):
         return "<ProtocolNode>"
 
-class ProtocolMethod(ExpNode):
+class ProtocolMethod(ExpressionNode):
     def __init__(self, idx, typex, params , reType ="Object"):
         self.id = idx
         self.type = typex
@@ -170,25 +170,14 @@ class ProtocolMethod(ExpNode):
     def type_of(self):
         return self.retType
 
-class AtomicNode(ExpNode):
+class AtomicNode(ExpressionNode):
     def __init__(self, lex):
         self.lex = lex
     def __str__(self):
         return "<AtomicNode>"
 
-class BinaryNode(ExpNode):
-    def __init__(self, lnode, rnode):
-        self.left = lnode
-        self.right = rnode
-    def __str__(self):
-        return "<BinaryNode>"
-    def type_of(self):
-        try:
-            return self.lnode.type_of()
-        except:
-            return 'Object'
 
-class BlockNode(ExpNode):
+class BlockNode(ExpressionNode):
     def __init__(self, exprs):
         self.exprs = exprs
     def __str__(self):
@@ -196,7 +185,7 @@ class BlockNode(ExpNode):
     def type_of(self):
         return self.exprs[-1].type_of()
 
-class CallNode(ExpNode):
+class CallNode(ExpressionNode):
     def __init__(self, idx, args, obj=None, typex=None):
         self.obj = obj
         self.id = idx
@@ -207,7 +196,7 @@ class CallNode(ExpNode):
     def type_of(self):
         return self._type
 
-class CallTypeAttr(ExpNode):
+class CallTypeAttr(ExpressionNode):
     def __init__(self, type_id, attr):
         self.type_id = type_id
         self.attr = attr
@@ -217,7 +206,7 @@ class CallTypeAttr(ExpNode):
     def type_of(self):
         return "Object"
 
-class CallTypeFunc(ExpNode):
+class CallTypeFunc(ExpressionNode):
     def __init__(self, type_id, func):
         self.type_id = type_id
         self.func = func
@@ -248,7 +237,7 @@ class VarNode(AtomicNode):
     def type_of(self):
         return self.type
 
-class InstantiateTypeNode(ExpNode):
+class InstantiateTypeNode(ExpressionNode):
     def __init__(self, idx, args):
         self.id = idx
         self.args = args
@@ -256,6 +245,18 @@ class InstantiateTypeNode(ExpNode):
         return "<InstantiateTypeNode>"
     def type_of(self):
         return self.idx
+
+class BinaryNode(ExpressionNode):
+    def __init__(self, lnode, rnode):
+        self.left = lnode
+        self.right = rnode
+    def __str__(self):
+        return "<BinaryNode>"
+    def type_of(self):
+        try:
+            return self.lnode.type_of()
+        except:
+            return 'Object'
 
 class PlusNode(BinaryNode):
     pass
@@ -281,16 +282,16 @@ class OrNode(BinaryNode):
 class NotNode(AtomicNode):
     pass
 
-class GreaterThatNode(BinaryNode):
+class GreaterThanNode(BinaryNode):
     pass
 
-class LessThatNode(BinaryNode):
+class LessThanNode(BinaryNode):
     pass
 
-class GreaterOrEqualThatNode(BinaryNode):
+class GreaterOrEqualThanNode(BinaryNode):
     pass
 
-class LessOrEqualThatNode(BinaryNode):
+class LessOrEqualThanNode(BinaryNode):
     pass
 
 class EqualNode(BinaryNode):
@@ -305,7 +306,7 @@ class StringSimpleConcatNode(BinaryNode):
 class StringSpaceConcatNode(BinaryNode):
     pass
 
-class WhileLoopNode(ExpNode):
+class WhileLoopNode(ExpressionNode):
     def __init__(self, expr, body):
         self.expr = expr
         self.body = body
@@ -314,7 +315,7 @@ class WhileLoopNode(ExpNode):
     def type_of(self):
         return self.body.type_of()
 
-class ForLoopNode(ExpNode):
+class ForLoopNode(ExpressionNode):
     def __init__(self, var, expr, body):
         self.var = var
         self.expr = expr
@@ -324,9 +325,9 @@ class ForLoopNode(ExpNode):
     def type_of(self):
         return self.body.type_of()
 
-class IfNode(ExpNode):
-    def __init__(self, if_expr, then_expr, else_expr) -> None:
-        self.if_expr = if_expr
+class IfNode(ExpressionNode):
+    def __init__(self, cond_exp, then_expr, else_expr) -> None:
+        self.cond_expr = cond_exp
         self.then_expr = then_expr
         self.else_expr = else_expr
     def __str__(self):
@@ -343,7 +344,7 @@ class ParamNode(StatementNode):
     def type_of(self):
         return self.typex
 
-class ParenthesisExpr(ExpNode): #Exp between parenthesis
+class ParenthesisExpr(ExpressionNode): #Exp between parenthesis
     def __init__(self, expr):
         self.expr = expr
     def __str__(self):

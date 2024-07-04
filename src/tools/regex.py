@@ -10,6 +10,7 @@ printer = get_printer(AtomicNode=AtomicNode, UnaryNode=UnaryNode, BinaryNode=Bin
 
 # AST Nodes
 EPSILON = 'ε'
+
 class EpsilonNode(AtomicNode):
     def evaluate(self):
         states = 1
@@ -44,7 +45,6 @@ class ConcatNode(BinaryNode):
     def operate(lvalue, rvalue):
         return automata_concatenation(lvalue, rvalue)
 # ConcatNode(SymbolNode('a'), SymbolNode('b')).evaluate()
-
 
 # ============================================= GRAMMAR DEFINITION =========================================
 G = Grammar()
@@ -129,3 +129,4 @@ class Regex:
         mini = automata_minimization(dfa)
         # display(mini)
         return mini
+
