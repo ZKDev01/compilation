@@ -210,19 +210,16 @@ def automata_closure(a1: NFA) -> NFA:
 def distinguish_states(group: list[DisjointNode], automaton: NFA, partition: DisjointSet):
   split = {}
   vocabulary = tuple(automaton.vocabulary)
-
+    
   for member in group:
-    state = member.value
+    member_trans = automaton.transitions[member.value]
+    reach_states = tuple((member_trans[s][0] if s in member_trans else None) for s in vocabulary)
+    reach_s_groups = tuple((partition[state].representative if state in partition.nodes else None) for state in reach_states)
 
-    destinations = []
-    for char in vocabulary:            
-      destinations.append(partition[automaton.transitions[state][char][0]].representative)
-    destinations = tuple(destinations)
-        
     try:
-      split[destinations].append(state)    
+      split[reach_s_groups].append(member.value)
     except KeyError:
-      split[destinations] = [state]     
+      split[reach_s_groups] = [member.value]
 
   return [ group for group in split.values()]
 
