@@ -4,28 +4,26 @@ from tools.cmp.utils import ContainerSet
 
 def compute_local_first(firsts, alpha):
   first_alpha = ContainerSet()
-  
+    
   try:
     alpha_is_epsilon = alpha.IsEpsilon
   except:
     alpha_is_epsilon = False
-  
+    
   if alpha_is_epsilon:
-    first_alpha.set_epsilon()
+    first_alpha.set_epsilon() # first_alpha.add(Epsilon)
+  
   else:
-    first_alpha.update(firsts[alpha._symbols[0]])
-    i = 0
-    x_i = alpha._symbols[i]
-    while firsts[x_i].contains_epsilon:
-      if i == len(alpha._symbols):
-        first_alpha.set_epsilon()
+    for Xi in alpha:
+      first_Xi = firsts[Xi]
+      if first_Xi.contains_epsilon:
+        first_alpha.hard_update(first_Xi)
+      else:
+        first_alpha.hard_update(first_Xi)
         break
-      i += 1
-      x_i = alpha._symbols[i]
-      if not firsts[x_i].contains_epsilon:
-        first_alpha.update(firsts[x_i])  
-        break 
+  # First(alpha)
   return first_alpha
+  
 
 def compute_firsts(G: Grammar):
   firsts = {}
