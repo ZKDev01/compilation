@@ -388,7 +388,7 @@ class LR1Parser(ShiftReduceParser):
   def _build_parsing_table(self):
     G = self.G.AugmentedGrammar(True)
         
-    automaton = self.build_LR1_automaton(G)
+    automaton = build_LR1_automaton(G)
     for i, node in enumerate(automaton):
       if self.verbose: print(i, '\t', '\n\t '.join(str(x) for x in node.state), '\n')
       node.idx = i
