@@ -1,8 +1,8 @@
-from cmp.pycompiler import Grammar
+from tools.cmp.pycompiler import Grammar
 from tools.automata import NFA, nfa_to_dfa
 from tools.automata import automata_union, automata_concatenation, automata_closure, automata_minimization
-from cmp.ast import get_printer, AtomicNode, UnaryNode, BinaryNode
-from cmp.utils import Token
+from tools.cmp.ast import get_printer, AtomicNode, UnaryNode, BinaryNode
+from tools.cmp.utils import Token
 from tools.parsers import LL1Parser
 from tools.evaluation import evaluate_parse
 

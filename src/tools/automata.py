@@ -1,4 +1,4 @@
-from cmp.utils import ContainerSet, DisjointSet, DisjointNode
+from tools.cmp.utils import ContainerSet, DisjointSet, DisjointNode
 
 class NFA:
   def __init__(self, 

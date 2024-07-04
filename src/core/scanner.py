@@ -1,6 +1,6 @@
 from tools.regex import EPSILON
-from cmp.utils import Token
-from .lexer import Lexer
+from tools.cmp.utils import Token
+from core.lexer import Lexer
 from core.grammar import *
 import string
 from core.grammar import G, plus, minus, mult, div, open_par, closed_par, number
