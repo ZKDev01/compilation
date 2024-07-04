@@ -438,6 +438,8 @@ vector %= open_square_braket + vector_decl + close_square_braket, lambda h,s: Ve
 
 #vector declaration
 vector_decl %= param_list, lambda h,s: s[1]
-vector_decl %= expression + gen_pattern_symbol + var_id + in_ + expression, lambda h,s: VecDeclImplSyntaxNode(s[1], s[3], s[5])
+vector_decl %= exp + gen_pattern_symbol + var_id + in_ + exp, lambda h,s: VecDecImplSyntaxNode(s[1], s[3], s[5])
 
 #endregion
+
+
