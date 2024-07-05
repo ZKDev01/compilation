@@ -1,6 +1,4 @@
-from tools.cmp.utils import Token
-from tools.parsers import LR1Parser
-from core.scanner import build_lexer, tokenizer
+from core.lexer import generate_lexer, tokenizer
 from core.parser import parse, build_parser
 from core.grammar import G
 import os
@@ -18,17 +16,25 @@ def load_tests():
 
 def main() -> None:
   tests = load_tests()
-  lexer = build_lexer()
-  # parser = build_parser()
+  lexer = generate_lexer()
+  parser = build_parser()
   
   print("TESTING IN PROCESS")
-  for _, test in tests:
+  for name, test in tests:
+    
+    print('================= FILENAME ====================')
+    print(f'file: {name}')
+
+    print('=================== CODE ======================')
+    print(f'\n\n{test}\n\n')
+    
+    print('================== TOKENS =====================')
     tokens = tokenizer(test, lexer=lexer)
-    print("========= TOKENS ===========")
     print(tokens)
-    #ast = parse(parser, tokens)
-    #print(ast)
-    print()
+    
+    print('==================== AST ======================')
+    ast = parse(tokens)
+    print(ast)
 
 if __name__ == '__main__':
   main()

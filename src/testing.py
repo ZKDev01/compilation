@@ -2,7 +2,7 @@ from tools.cmp.pycompiler import Grammar, Sentence
 from tools.cmp.utils import ContainerSet
 
 from tools.automata import NFA, DFA, automata_union, automata_concatenation, automata_closure, nfa_to_dfa, state_minimization, distinguish_states, automata_minimization
-from tools.parsers import compute_firsts, compute_follows, build_parsing_table_LL1_parser
+# from tools.parsers import compute_firsts, compute_follows, build_parsing_table_LL1_parser
 
 def testing_automata():
   
@@ -166,6 +166,8 @@ def testing_automata():
     valid_list=['ababbaabb','abb'],
     notvalid_list=['','ab','aaaaa','bbbbb','abbabababa'])
 
+""" 
+
 def testing_parsers():
 
   # DEF TESTING-GRAMMAR
@@ -221,6 +223,9 @@ def testing_parsers():
   print( "PARSING TABLE LL1" )
   print( print_parsing_table_LL1(G=G1) )
 
+
+"""
+
 def testing_regex():
 
   
@@ -230,7 +235,7 @@ def testing_regex():
 
 def main() -> None:
   testing_automata()
-  testing_parsers()
+  # testing_parsers()
 
 
 if __name__ == '__main__':
