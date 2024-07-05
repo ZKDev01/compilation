@@ -335,9 +335,7 @@ vector_decl %= expression + gen_pattern_symbol + identifier + in_ + expression, 
 #endregion
 
 #region: SYMBOLS
-
 DIGITS = '|'.join(str(i) for i in range(0, 10))
-NONZERODIGITS = '|'.join(str(i) for i  in range(1, 10))
 LOWERS = '|'.join(chr(i) for i in range(ord('a'), ord('z') + 1))
 UPPERS = '|'.join(chr(i) for i in range(ord('A'), ord('Z') + 1))
 
@@ -357,8 +355,8 @@ def mapping(string):
 
 INTEGER = f'({DIGITS})(.|{EPSILON})({DIGITS})*'
 
-printables = '|'.join([printable for printable in list(map(mapping,string.printable))])
-STRINGS_VALUES = f'(\")({printables})*(\")'
+string_values = '|'.join([printable for printable in list(map(mapping,string.printable))])
+STRINGS_VALUES = f'(\")({string_values})*(\")'
 
 SPACE = '(\n|\t|\f|\r|\v| )(\n|\t|\f|\r|\v| )*'
 #endregion
