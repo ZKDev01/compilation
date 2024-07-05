@@ -3,7 +3,6 @@ from tools.cmp import visitor
 from tools.cmp.semantic import Scope, Context
 
 class SemanticCheckerVisitor:
-
   def __init__(self):
     self.errors = []
     

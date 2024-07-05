@@ -39,14 +39,20 @@ def main() -> None:
     tokens = tokenizer(test, lexer=lexer)
     print(tokens)
     
-    print('==================== AST ======================')
+    print('=================== AST =======================')
     ast = parse(tokens)
     print(ast)
     
-    print('==================== SEMANTIC cHECKING ======================')
+    print('=========== SEMANTIC CHECKING =================')
     semantic_checker.clean_errors()
     semantics_errors = semantic_checker.visit(ast)
+    
     print(semantics_errors)
+    
+    if len(semantics_errors) == 0:
+      print('=========== SEARCH TYPE ERRORS ================')
+      types_errors = typer_checker.visit(ast)
+      print(types_errors)
 
 if __name__ == '__main__':
   main()
