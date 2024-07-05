@@ -1,7 +1,9 @@
-from core.lexer import generate_lexer, tokenizer
-from core.parser import parse, build_parser
-from core.grammar import G
 import os
+
+from core.grammar import G
+
+from core.lexer import build_lexer, tokenizer
+from core.parser import parse, build_parser
 
 def load_tests():
   files = os.listdir('./tests/')
@@ -16,9 +18,8 @@ def load_tests():
 
 def main() -> None:
   tests = load_tests()
-  lexer = generate_lexer()
-  parser = build_parser()
-  
+  lexer = build_lexer()
+
   print("TESTING IN PROCESS")
   for name, test in tests:
     
