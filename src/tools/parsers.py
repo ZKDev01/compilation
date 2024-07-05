@@ -2,77 +2,76 @@ from tools.cmp.pycompiler import *
 from tools.cmp.automata import State, lr0_formatter, multiline_formatter
 from tools.cmp.utils import ContainerSet
 
-def compute_local_first(firsts, alpha):
+def compute_local_first(firsts: dict[Symbol, ContainerSet], alpha: Sentence) -> ContainerSet:
   first_alpha = ContainerSet()
-    
+
   try:
     alpha_is_epsilon = alpha.IsEpsilon
-  except:
+  except AttributeError:
     alpha_is_epsilon = False
     
   if alpha_is_epsilon:
-    first_alpha.set_epsilon() # first_alpha.add(Epsilon)
-  
+    first_alpha.set_epsilon()
   else:
-    for Xi in alpha:
-      first_Xi = firsts[Xi]
-      if first_Xi.contains_epsilon:
-        first_alpha.hard_update(first_Xi)
-      else:
-        first_alpha.hard_update(first_Xi)
+    for symbol in alpha:
+      first_alpha.update(firsts[symbol])
+      if not firsts[symbol].contains_epsilon:
         break
-  # First(alpha)
+    else:
+      first_alpha.set_epsilon()
   return first_alpha
-  
 
-def compute_firsts(G: Grammar):
+def compute_firsts(G):
   firsts = {}
   change = True
-  
+  # init First(Vt)
   for terminal in G.terminals:
     firsts[terminal] = ContainerSet(terminal)
-  
+  # init First(Vn)
   for nonterminal in G.nonTerminals:
     firsts[nonterminal] = ContainerSet()
   while change:
     change = False
-    
+    # P: X -> alpha
     for production in G.Productions:
       X = production.Left
       alpha = production.Right
-      
+      # get current First(X)
       first_X = firsts[X]
-      
+      # init First(alpha)
       try:
         first_alpha = firsts[alpha]
       except KeyError:
         first_alpha = firsts[alpha] = ContainerSet()
-      
+      # CurrentFirst(alpha)???
       local_first = compute_local_first(firsts, alpha)
-      
+      # update First(X) and First(alpha) from CurrentFirst(alpha)
       change |= first_alpha.hard_update(local_first)
       change |= first_X.hard_update(local_first)
-  
+  # First(Vt) + First(Vt) + First(RightSides)
   return firsts
 
-def compute_follows(G: Grammar, firsts):
+def compute_follows(G, firsts):
   follows = { }
   change = True
-
-  local_firsts = {}
   
+  # init Follow(Vn)
   for nonterminal in G.nonTerminals:
     follows[nonterminal] = ContainerSet()
   follows[G.startSymbol] = ContainerSet(G.EOF)
   
   while change:
     change = False
-    
+    # P: X -> alpha
     for production in G.Productions:
       X = production.Left
       alpha = production.Right
       follow_X = follows[X]
-      
+      ###################################################
+      # X -> zeta Y beta
+      # First(beta) - { epsilon } subset of Follow(Y)
+      # beta ->* epsilon or X -> zeta Y ? Follow(X) subset of Follow(Y)
+      ###################################################
       if alpha.IsEpsilon:
         continue
             
@@ -86,8 +85,113 @@ def compute_follows(G: Grammar, firsts):
             change |= follows[Y].update(follow_X)
         if i == n-1 and beta.IsNonTerminal:
           change |= follows[beta].update(follow_X)
-
+      ###################################################
+  # Follow(Vn)
   return follows
+
+class LL1Parser():
+  def __init__(self, G):
+    self.G = G
+    self.M: dict[(NonTerminal, Terminal), Production] = {}
+    self.firsts = compute_firsts(self.G)
+    self.follows = compute_follows(self.G, self.firsts)
+    self._build_parsing_table()
+
+  def _build_parsing_table(self):
+    G = self.G
+    firsts = compute_firsts(G)
+    follows = compute_follows(G, firsts)
+    M = {} # [NonTerminal, Terminal] -> [Production]
+    
+    for production in G.Productions:
+      X = production.Left
+      alpha = production.Right
+        
+      if not alpha.IsEpsilon:
+        for first in firsts[alpha]:
+          if (X, first) in M:
+            raise Exception(f'The grammar is not LL(1) because the pair({X}, {first}) has already asociated the production {M[X, first]} and want assign the production {production}')
+          M[X, first] = [production, ]
+      else:
+        for follow in follows[X]:
+          if (X, follow) in M:
+            raise Exception('La gramatica no es LL(1)')
+          M[X, follow] = [production, ]
+    self.M = M
+
+  def __call__(self, w: list[Symbol]):
+    G, M = self.G, self.M
+
+    stack =  [G.EOF, G.startSymbol]
+    cursor = 0
+    output = []
+    
+    while True:
+      top = stack.pop()
+      a = w[cursor]
+      
+      if top.IsEpsilon:
+        pass
+      elif top.IsTerminal:
+        assert top == a
+        if top == G.EOF:
+          break
+        cursor += 1
+      else:
+        [production, ] = M[top,a]
+        output.append(production)
+        production = list(production.Right)
+        stack.extend(production[::-1])
+
+    return output
+
+class ShiftReduceParser:
+  SHIFT = 'SHIFT'
+  REDUCE = 'REDUCE'
+  OK = 'OK'
+    
+  def __init__(self, G: Grammar, verbose=False):
+    self.G = G
+    self.verbose = verbose
+    self.action = {}
+    self.goto = {}
+    self._build_parsing_table()
+    
+  def _build_parsing_table(self):
+    raise NotImplementedError()
+
+  def __call__(self, w):
+    stack = [ 0 ]
+    cursor = 0
+    output = []
+        
+    while True:
+      state = stack[-1]
+      lookahead = w[cursor]
+      if self.verbose: 
+        print(stack, '<---||--->', w[cursor:])
+      action, tag = self.action[state, lookahead]     
+      match action:
+        case self.SHIFT:
+          stack.append(lookahead)
+          stack.append(tag)
+          cursor += 1
+        case self.REDUCE:
+          production = self.G.Productions[tag]
+          X, beta = production
+          for i in range(2 * len(beta)):
+            stack.pop()
+          l = stack[-1]
+          stack.append(X.Name)
+          stack.append(self.goto[l,X])
+          output.append(production)
+        case self.OK:
+          break
+        case _:
+          raise Exception
+        
+    return output
+
 
 def build_LR0_automaton(G: Grammar):
   assert len(G.startSymbol.productions) == 1, 'Grammar must be augmented'
@@ -162,63 +266,7 @@ def build_LR1_automaton(G: Grammar) -> State:
     
   automaton.set_formatter(multiline_formatter)
   return automaton
-
-class LL1Parser():
-  def __init__(self, G):
-    self.G = G
-    self.M: dict[(NonTerminal, Terminal), Production] = {}
-    self.firsts = compute_firsts(self.G)
-    self.follows = compute_follows(self.G, self.firsts)
-    self._build_parsing_table()
-
-  def _build_parsing_table(self):
-    G = self.G
-    firsts = compute_firsts(G)
-    follows = compute_follows(G, firsts)
-    M = {} # [NonTerminal, Terminal] -> [Production]
-    
-    for production in G.Productions:
-        X = production.Left
-        alpha = production.Right
-        
-        if not alpha.IsEpsilon:
-            for first in firsts[alpha]:
-                if (X, first) in M:
-                    raise Exception(f'The grammar is not LL(1) because the pair({X}, {first}) has already asociated the production {M[X, first]} and want assign the production {production}')
-                M[X, first] = [production, ]
-        else:
-            for follow in follows[X]:
-                if (X, follow) in M:
-                    raise Exception('La gramatica no es LL(1)')
-                M[X, follow] = [production, ]
-    self.M = M
-
-  def __call__(self, w: list[Symbol]):
-    G, M = self.G, self.M
-
-    stack =  [G.EOF, G.startSymbol]
-    cursor = 0
-    output = []
-    
-    while True:
-        top = stack.pop()
-        a = w[cursor]
-        
-        if top.IsEpsilon:
-            pass
-        elif top.IsTerminal:
-            assert top == a
-            if top == G.EOF:
-                break
-            cursor += 1
-        else:
-            [production, ] = M[top,a]
-            output.append(production)
-            production = list(production.Right)
-            stack.extend(production[::-1])
-
-    return output
-           
+  
 
 def evaluate_reverse_parse(right_parse, operations, tokens):
   if not right_parse or not operations or not tokens:
@@ -298,54 +346,6 @@ def goto_lr1(items, symbol: Symbol, firsts: dict[Sentence:ContainerSet] = None, 
   assert just_kernel or firsts is not None, '`firsts` must be provided if `just_kernel=False`'
   items = frozenset(item.NextItem() for item in items if item.NextSymbol == symbol)
   return items if just_kernel else LR1Parser.closure_lr1(items, firsts)
-
-
-class ShiftReduceParser:
-  SHIFT = 'SHIFT'
-  REDUCE = 'REDUCE'
-  OK = 'OK'
-    
-  def __init__(self, G: Grammar, verbose=False):
-    self.G = G
-    self.verbose = verbose
-    self.action = {}
-    self.goto = {}
-    self._build_parsing_table()
-    
-  def _build_parsing_table(self):
-    raise NotImplementedError()
-
-  def __call__(self, w):
-    stack = [ 0 ]
-    cursor = 0
-    output = []
-        
-    while True:
-      state = stack[-1]
-      lookahead = w[cursor]
-      if self.verbose: 
-        print(stack, '<---||--->', w[cursor:])
-      action, tag = self.action[state, lookahead]     
-      match action:
-        case self.SHIFT:
-          stack.append(lookahead)
-          stack.append(tag)
-          cursor += 1
-        case self.REDUCE:
-          production = self.G.Productions[tag]
-          X, beta = production
-          for i in range(2 * len(beta)):
-            stack.pop()
-          l = stack[-1]
-          stack.append(X.Name)
-          stack.append(self.goto[l,X])
-          output.append(production)
-        case self.OK:
-          break
-        case _:
-          raise Exception
-        
-    return output
 
 class SLR1Parser(ShiftReduceParser):
   def _build_parsing_table(self):
