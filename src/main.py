@@ -3,9 +3,19 @@ import os
 from core.grammar import G
 
 from core.lexer import build_lexer, tokenizer
-from core.parser import parse, build_parser
 
+from tools.parsers import LR1Parser
+from tools.cmp.utils import Token
+from tools.cmp.evaluation import evaluate_reverse_parse
 from tools.semantic import SemanticCheckerVisitor, TypeCheckingVisitor
+
+def parse(tokens: list[Token]):
+  parse = LR1Parser(G)
+  result = parse(tokens, get_shift_reduce=True)
+
+  right_parse, operations = result
+  ast = evaluate_reverse_parse(right_parse, operations, tokens)
+  return ast
 
 def load_tests():
   files = os.listdir('./tests/')
@@ -24,7 +34,6 @@ def main() -> None:
 
   semantic_checker = SemanticCheckerVisitor()
   typer_checker = TypeCheckingVisitor()
-
 
   print("TESTING IN PROCESS")
   for name, test in tests:
@@ -48,9 +57,10 @@ def main() -> None:
     semantics_errors = semantic_checker.visit(ast)
     
     print(semantics_errors)
+    for i, error in enumerate(semantics_errors, 1):
+      print(f'{i}.', error) 
     
     if len(semantics_errors) == 0:
-      print('=========== SEARCH TYPE ERRORS ================')
       types_errors = typer_checker.visit(ast)
       print(types_errors)
 
