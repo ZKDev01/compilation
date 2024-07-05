@@ -32,7 +32,7 @@ class State:
     def add_transition(self, symbol, state):
         try:
             self.transitions[symbol].append(state)
-        except:
+        except KeyError:
             self.transitions[symbol] = [state]
         return self
 
@@ -99,9 +99,9 @@ class State:
     def epsilon_closure_by_state(*states):
         closure = { state for state in states }
 
-        l = 0
+        l = 0  # noqa: E741
         while l != len(closure):
-            l = len(closure)
+            l = len(closure)  # noqa: E741
             tmp = [s for s in closure]
             for s in tmp:
                 for epsilon_state in s.epsilon_transitions:
@@ -188,7 +188,7 @@ class State:
     def _repr_svg_(self):
         try:
             return self.graph().create_svg().decode('utf8')
-        except:
+        except Exception:
             pass
 
     def write_to(self, fname):

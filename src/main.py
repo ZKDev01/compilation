@@ -17,17 +17,19 @@ def load_tests():
   return tests
 
 def main() -> None:
-  pass
-
-if __name__ == '__main__':
   tests = load_tests()
   lexer = build_lexer()
-  parser = build_parser()
-
-  for name, test in tests:
-    print(f'Running test {name}')
-    tokens = tokenizer(lexer, test)
-    ast = parse(parser, tokens)
-    print(ast)
+  # parser = build_parser()
+  
+  print("TESTING IN PROCESS")
+  for _, test in tests:
+    tokens = tokenizer(test, lexer=lexer)
+    print("========= TOKENS ===========")
+    print(tokens)
+    #ast = parse(parser, tokens)
+    #print(ast)
     print()
+
+if __name__ == '__main__':
+  main()
 

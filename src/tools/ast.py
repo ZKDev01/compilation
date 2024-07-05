@@ -32,20 +32,20 @@ class ExpressionNode(Node):
     def __str__(self):
         return "<ExpressionNode>"
 
-class VarsDeclListNode(StatementNode):
-    def __init__(self, decls, body):
-        self.decls = decls
+class VarsDeclarationsListNode(StatementNode):
+    def __init__(self, declarations, body):
+        self.declarations = declarations
         self.body = body
     def __str__(self):
-        return f"<VarsDeclListNode>: {str(self.decls)} in {str(self.body)}"
+        return f"<VarsDeclarationsListNode>: {str(self.declarations)} in {str(self.body)}"
 
-class VarDeclNode(StatementNode):
+class VarDeclarationNode(StatementNode):
     def __init__(self, idx, expr , forced_type = 'Object'):
         self.id = idx
         self.expr = expr
 
     def __str__(self):
-        return f"<VarDeclNode>: let {self.id} = { str(self.expr) }"
+        return f"<VarDeclarationNode>: let {self.id} = { str(self.expr) }"
 
     def type_of(self):
         if self.expr.typeof() is not None:
@@ -53,25 +53,25 @@ class VarDeclNode(StatementNode):
         else:
             return 'Object'
 
-class VarAssign(StatementNode):
+class VarAssignation(StatementNode):
     def __init__(self, idx, expr):
         self.id = idx
         self.expr = expr
     def __str__(self):
-        return f"<VarAssign> {self.id} := {str(self.expr)}"
+        return f"<VarAssignation> {self.id} := {str(self.expr)}"
     def type_of(self):
         if self.expr.typeof() is not None:
             return self.expr.typeof()
         else:
             return 'Object'
 
-class FuncFullDeclNode(StatementNode):
+class FuncFullDeclarationNode(StatementNode):
     def __init__(self, idx, params, body):
         self.id = idx
         self.params = params
         self.body = body
     def __str__(self):
-        return f"<FuncFullDeclNode> {self.id} ({str(self.params)}) {str(self.body)}"
+        return f"<FuncFullDeclarationNode> {self.id} ({str(self.params)}) {str(self.body)}"
 
     def type_of(self):
         if self.body.type_of() is not None:
@@ -79,13 +79,13 @@ class FuncFullDeclNode(StatementNode):
         else:
             return 'Void'
 
-class FuncInlineDeclNode(StatementNode):
+class FuncInlineDeclarationNode(StatementNode):
     def __init__(self, idx, params, body):
         self.id = idx
         self.params = params
         self.body = body
     def __str__(self):
-        return f"<FuncInlineDeclNode> {self.id}{str(self.params)} => {str(self.body)}"
+        return f"<FuncInlineDeclarationNode> {self.id}{str(self.params)} => {str(self.body)}"
 
     def type_of(self):
         if self.body.typeof() is not None:
@@ -93,14 +93,14 @@ class FuncInlineDeclNode(StatementNode):
         else:
             return 'Void'
 
-class TypeDeclNode(StatementNode):
+class TypeDeclarationNode(StatementNode):
     def __init__(self, idx, args, features, inherit=None):
         self.id = idx
         self.args = args
         self.features = features
         self.inherit = inherit
     def __str__(self):
-        return f"<TypeDeclNode> type {self.id} {self.features}"
+        return f"<TypeDeclarationNode> type {self.id} {self.features}"
 
     def type_of(self):
         return "Void"
@@ -112,33 +112,33 @@ class TypeInheritNode(StatementNode):
     def __str__(self):
         return "<TypeInheritNode>"
 
-class AttrDeclNode(StatementNode):
+class AttrDeclarationNode(StatementNode):
     def __init__(self, idx, typex, expr=None):
         self.id = idx
         self.type = typex
         self.expr = expr
     def __str__(self):
-        return f"<AttrDeclNode> {self.id} {str(self.expr)}"
+        return f"<AttrDeclarationNode> {self.id} {str(self.expr)}"
 
     def type_of(self):
         return self.expr.typeof()
     
 
-class VecDeclExplSyntaxNode(StatementNode):
+class VecDecExplSyntaxNode(StatementNode):
     def __init__(self, args):
         self.args = args
     def __str__(self):
-        return f"<VecDeclExplSyntaxNode> {str(self.args)}"
+        return f"<VecDecExplSyntaxNode> {str(self.args)}"
 
     def type_of(self):
         return "Vector"
-class VecDeclImplSyntaxNode(ExpressionNode):
+class VecDecImplSyntaxNode(ExpressionNode):
     def __init__(self, expr, var, in_):
         self.expr = expr
         self.var = var
         self.in_ = in_
     def __str__(self):
-        return "<VecDeclImplSyntaxNode>"
+        return "<VecDecImplSyntaxNode>"
 
     def type_of(self):
         return "Vector"
@@ -176,6 +176,17 @@ class AtomicNode(ExpressionNode):
     def __str__(self):
         return "<AtomicNode>"
 
+class BinaryNode(ExpressionNode):
+    def __init__(self, lnode, rnode):
+        self.left = lnode
+        self.right = rnode
+    def __str__(self):
+        return "<BinaryNode>"
+    def type_of(self):
+        try:
+            return self.lnode.type_of()
+        except:
+            return 'Object'
 
 class BlockNode(ExpressionNode):
     def __init__(self, exprs):
@@ -217,6 +228,7 @@ class CallTypeFunc(ExpressionNode):
         return self.func.type_of()
 
 class NumberNode(AtomicNode):
+
     def type_of(self):
         return "Number"
 
@@ -228,12 +240,12 @@ class BooleanNode(AtomicNode):
     def type_of(self):
         return "Bool"
 
-class VarNode(AtomicNode):
+class VariableNode(AtomicNode):
     def __init__(self, id, type='Object'):
         self.id = id
         self.type = type
     def __str__(self):
-        return "<VarNode>"
+        return "<VariableNode>"
     def type_of(self):
         return self.type
 
@@ -245,18 +257,6 @@ class InstantiateTypeNode(ExpressionNode):
         return "<InstantiateTypeNode>"
     def type_of(self):
         return self.idx
-
-class BinaryNode(ExpressionNode):
-    def __init__(self, lnode, rnode):
-        self.left = lnode
-        self.right = rnode
-    def __str__(self):
-        return "<BinaryNode>"
-    def type_of(self):
-        try:
-            return self.lnode.type_of()
-        except:
-            return 'Object'
 
 class PlusNode(BinaryNode):
     pass
@@ -282,16 +282,16 @@ class OrNode(BinaryNode):
 class NotNode(AtomicNode):
     pass
 
-class GreaterThanNode(BinaryNode):
+class GreaterThatNode(BinaryNode):
     pass
 
-class LessThanNode(BinaryNode):
+class LessThatNode(BinaryNode):
     pass
 
-class GreaterOrEqualThanNode(BinaryNode):
+class GreaterOrEqualThatNode(BinaryNode):
     pass
 
-class LessOrEqualThanNode(BinaryNode):
+class LessOrEqualThatNode(BinaryNode):
     pass
 
 class EqualNode(BinaryNode):
@@ -326,8 +326,8 @@ class ForLoopNode(ExpressionNode):
         return self.body.type_of()
 
 class IfNode(ExpressionNode):
-    def __init__(self, cond_exp, then_expr, else_expr) -> None:
-        self.cond_expr = cond_exp
+    def __init__(self, if_expr, then_expr, else_expr) -> None:
+        self.if_expr = if_expr
         self.then_expr = then_expr
         self.else_expr = else_expr
     def __str__(self):
@@ -344,9 +344,8 @@ class ParamNode(StatementNode):
     def type_of(self):
         return self.typex
 
-class ParenthesisExpr(ExpressionNode): #Exp between parenthesis
+class ParenthesisExpr(ExpressionNode):
     def __init__(self, expr):
         self.expr = expr
     def __str__(self):
         return "<ParenthesisExpr>"
-    

@@ -42,12 +42,10 @@ class NFA:
     
     while pending:
       state = pending.pop()
-      try:
-        new_states = self.map[(state,'')]
-        closure.update(new_states)
-        closure.update(self.epsilon_closure(new_states).set)
-      except KeyError:
-        pass     
+      for s in self.epsilon_transitions(state):
+        if s not in closure:
+          closure.add(s)
+          pending.append(s)  
     
     return ContainerSet(*closure)
 
@@ -88,6 +86,14 @@ class DFA(NFA):
         return False
     return self.current in self.finals
 
+def get_moves(automaton: NFA, states: list, symbol: str):
+  moves = set()
+  for state in states:
+    if symbol in automaton.transitions[state]:
+      for s in automaton.transitions[state][symbol]:
+        moves.add(s)
+  return moves
+
 def nfa_to_dfa(automaton: NFA) -> DFA:
   transitions = {}
     
@@ -95,41 +101,34 @@ def nfa_to_dfa(automaton: NFA) -> DFA:
   start.id = 0
   start.is_final = any(s in automaton.finals for s in start)
   states = [ start ]
-  state_sets = [ start.set ]
 
   pending = [ start ]
-  index = 0
   while pending:
     state = pending.pop()
         
     for symbol in automaton.vocabulary:
-      next_state_set = automaton.epsilon_closure(automaton._move(list(state.set), symbol)).set
-
-      if not next_state_set: 
-        continue              
-
-      try:
-        i = state_sets.index(next_state_set)
-        next_state = states[i]
-      except ValueError:                
-        next_state = ContainerSet(*next_state_set)
-        index += 1
-        next_state.id = index
-        next_state.is_final = any(s in automaton.finals for s in next_state)
-
-        states.append(next_state)
-        state_sets.append(next_state_set)
-        pending.append(next_state)          
-
+      moves = get_moves(automaton=automaton, states=state, symbol=symbol)
+      closure = automaton.epsilon_closure(moves)
+      if not closure:
+        continue
+            
+      if closure not in states:
+        closure.id = len(states)
+        closure.is_final = any(s in automaton.finals for s in closure)
+        states.append(closure)
+        pending.append(closure)
+      else:
+        index = states.index(closure)
+        closure = states[index]
+                
       try:
         transitions[state.id, symbol]
         assert False, 'Invalid DFA!!!'
       except KeyError:
-        transitions[state.id,symbol] = next_state.id
+        transitions[state.id, symbol] = closure.id
     
   finals = [ state.id for state in states if state.is_final ]
-  dfa = DFA(len(states), finals, transitions)
-  return dfa
+  return DFA(len(states), finals, transitions)
 
 def automata_union(a1: NFA, a2: NFA) -> NFA:
   transitions = {}
@@ -166,18 +165,30 @@ def automata_concatenation(a1: NFA, a2: NFA) -> NFA:
   d1 = 0
   d2 = a1.states + d1
   final = a2.states + d2
-
-  for (origin, symbol), destinations in a1.map.items():
-    # Relocate a1 transitions ...
-    transitions[origin, symbol] = destinations
-  for (origin, symbol), destinations in a2.map.items():
-    # Relocate a2 transitions ...
-    transitions[d2 + origin, symbol] = [d2 + d for d in destinations]
     
-  # Add transitions to final state ...
-  transitions[d2 - 1, ''] = [d2]
-  transitions[final - 1, ''] = [final]
-            
+  transitions[(start, '')] = [a1.start + d1]
+    
+  for (origin, symbol), destinations in a1.map.items():
+    ## Relocate a1 transitions ...
+    transitions[(origin + d1, symbol)] = [state + d1 for state in destinations]
+
+  for (origin, symbol), destinations in a2.map.items():
+    ## Relocate a2 transitions ...
+    transitions[(origin + d2, symbol)] = [state + d2 for state in destinations]
+    
+  ## Add transitions to final state ...
+  for state in a1.finals:
+    try:
+      transitions[(state + d1, '')].append(a2.start + d2)
+    except:
+      transitions[(state + d1, '')] = [a2.start + d2]
+    
+  for state in a2.finals:
+    try:
+      transitions[(state + d2, '')].append(final)
+    except:
+      transitions[(state + d2, '')] = [final]
+
   states = a1.states + a2.states + 1
   finals = { final }
     
