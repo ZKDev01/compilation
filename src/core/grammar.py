@@ -15,65 +15,65 @@ program_level_decl = G.NonTerminal('<program-level-decl>')
 instr_wrapper = G.NonTerminal('<inst-wrapper>')
 instr = G.NonTerminal('<inst>')
 var_dec = G.NonTerminal('<var-dec>')
-expression = G.NonTerminal('<expression>')
+expr = G.NonTerminal('<expression>')
 flux_control = G.NonTerminal('<flux-control>')
 base_exponent = G.NonTerminal('<base-exponent>')
 scope = G.NonTerminal('<scope>')
-function_declaration = G.NonTerminal('<function-declaration>')
-function_call = G.NonTerminal('<function-call>')
-type_declaration = G.NonTerminal('<type-declaration>')
+func_decl = G.NonTerminal('<function-declaration>')
+func_call = G.NonTerminal('<function-call>')
+type_decl = G.NonTerminal('<type-declaration>')
 id_list = G.NonTerminal('<id-list>')
-type_instanciation = G.NonTerminal('<type-instanciation>')
-var_asignation = G.NonTerminal('<var-asign>')
-aritmetic_operation = G.NonTerminal('<aritmetic-operation>')
+type_inst = G.NonTerminal('<type-instanciation>')
+var_asig = G.NonTerminal('<var-asign>')
+arit_oper = G.NonTerminal('<aritmetic-operation>')
 factor = G.NonTerminal('<factor>')
 term = G.NonTerminal('<term>')
 atom = G.NonTerminal('<atom>')
-var_initialization = G.NonTerminal('<var-init>')
-var_inicialization_list = G.NonTerminal('<vat-init-list>')
-string_operation =G.NonTerminal('<string-operation>')
+var_init = G.NonTerminal('<var-init>')
+var_init_list = G.NonTerminal('<vat-init-list>')
+string_oper =G.NonTerminal('<string-operation>')
 string_atom = G.NonTerminal('<string-atom>')
-function_full_declaration = G.NonTerminal('<function-full-declaration>')
-function_inline_declaration = G.NonTerminal('<function-inline-declaration>')
+func_full_decl = G.NonTerminal('<function-full-declaration>')
+func_inline_decl = G.NonTerminal('<function-inline-declaration>')
 var_decl_expression = G.NonTerminal('<var-decl-expr>')
 conditional = G.NonTerminal('<conditional>')
-inline_conditional = G.NonTerminal('<inline-conditional>')
-full_conditional = G.NonTerminal('<full-conditional>')
-else_statement = G.NonTerminal('<else-statement>')
+inline_cond = G.NonTerminal('<inline-conditional>')
+full_cond = G.NonTerminal('<full-conditional>')
+else_stat = G.NonTerminal('<else-statement>')
 inline_else = G.NonTerminal('<inline-else>')
 full_else = G.NonTerminal('<full-else>')
 loop = G.NonTerminal('<loop>')
 while_loop = G.NonTerminal('<while-loop>')
 for_loop = G.NonTerminal('<for-loop>')
-iterable_expression = G.NonTerminal('<iterable-expression>')
-conditional_expression = G.NonTerminal('<conditional-expresssion>')
+iter_expr = G.NonTerminal('<iterable-expression>')
+cond_expr = G.NonTerminal('<conditional-expresssion>')
 condition = G.NonTerminal('<condition>')
-boolean_value = G.NonTerminal('<boolean-value>') 
-comparation = G.NonTerminal('<comparation>')
+bool_val = G.NonTerminal('<boolean-value>') 
+comp = G.NonTerminal('<comparation>')
 decl_body = G.NonTerminal('<decl-body>')
 decl_list = G.NonTerminal('<decl-list>')
-declaration = G.NonTerminal('<decl>')
+decl = G.NonTerminal('<decl>')
 constructor = G.NonTerminal('<constructor>')
-atribute_declaration = G.NonTerminal('<atribute-declaration>')
-method_declaration = G.NonTerminal('<method-declaration>')
-function_call = G.NonTerminal('<function-call>')
+attr_decl = G.NonTerminal('<atribute-declaration>')
+method_decl = G.NonTerminal('<method-declaration>')
+func_call = G.NonTerminal('<function-call>')
 param_list = G.NonTerminal('<param-list>')
-variable_atribute = G.NonTerminal('<var-attr>')
-variable_method = G.NonTerminal('<var-method>')
-identifier = G.NonTerminal('<identifier>')
+var_attr = G.NonTerminal('<var-attr>')
+var_method = G.NonTerminal('<var-method>')
+id = G.NonTerminal('<identifier>')
 type_anotation = G.NonTerminal('<type-anotation>')
-protocol_declaration =G.NonTerminal('<protocol-declaration>')
+protocol_decl =G.NonTerminal('<protocol-declaration>')
 var_use = G.NonTerminal('<var-use>')
 protocol_body = G.NonTerminal('<protocol-body>')
-extend_definer = G.NonTerminal('<extend-definer>')
+extend_ = G.NonTerminal('<extend-definer>')
 virtual_method_list = G.NonTerminal('<virtual-method-list>')
 virtual_method = G.NonTerminal('<virtual-method>')
 fully_typed_params = G.NonTerminal('<fully-typed-params>')
 fully_typed_param = G.NonTerminal('<fully-typed-param>')
-vector = G.NonTerminal('<vector>')
-vector_decl = G.NonTerminal('<vector-decl>')
-generation_pattern = G.NonTerminal('<generation-pattern>')
-function_declaration_id = G.NonTerminal('<func-decl-id>')
+vec = G.NonTerminal('<vector>')
+vec_decl = G.NonTerminal('<vector-decl>')
+gen_pattern = G.NonTerminal('<generation-pattern>')
+func_decl_id = G.NonTerminal('<func-decl-id>')
 inherits_type = G.NonTerminal('<inherits-type>')
 #endregion
 
@@ -86,23 +86,23 @@ open_bracket = G.Terminal('{')
 closed_bracket = G.Terminal('}')
 let = G.Terminal('let')
 ID = G.Terminal('ID')
-asignation = G.Terminal(':=')
-inicialization = G.Terminal('=')
+assign = G.Terminal(':=')
+init = G.Terminal('=')
 in_ = G.Terminal('in')
 inherits = G.Terminal('inherits')
 comma = G.Terminal(',')
 number = G.Terminal('number')
-open_curly_braket = G.Terminal('(')
-closed_curly_braket = G.Terminal(')')
-plus_operator = G.Terminal('+')
-minus_operator = G.Terminal('-')
-multiplication = G.Terminal('*')
-division = G.Terminal('/')
-module_operation = G.Terminal('%')
+open_par = G.Terminal('(')
+closed_par = G.Terminal(')')
+plus_ = G.Terminal('+')
+minus_ = G.Terminal('-')
+mult = G.Terminal('*')
+div = G.Terminal('/')
+module_oper = G.Terminal('%')
 string_= G.Terminal('string')
-string_operator = G.Terminal('@')
-string_operator_space = G.Terminal('@@')
-function = G.Terminal('function')
+string_oper = G.Terminal('@')
+string_oper_space = G.Terminal('@@')
+func = G.Terminal('function')
 func_arrow = G.Terminal('=>')
 if_ = G.Terminal('if')
 elif_ = G.Terminal('elif')
@@ -142,9 +142,9 @@ program_level_decl_list%= instr_wrapper, lambda h,s: [s[1]]
 program_level_decl_list %= program_level_decl + program_level_decl_list, lambda h,s: [s[1]] + s[2]
 program_level_decl_list %= G.Epsilon, lambda h,s: []
 
-program_level_decl %= type_declaration, lambda h,s: s[1]
-program_level_decl %= function_declaration, lambda h,s: s[1]
-program_level_decl %= protocol_declaration, lambda h,s: s[1]
+program_level_decl %= type_decl, lambda h,s: s[1]
+program_level_decl %= func_decl, lambda h,s: s[1]
+program_level_decl %= protocol_decl, lambda h,s: s[1]
 
 instr_list %= instr + semicolon, lambda h,s: [s[1]]
 instr_list %= instr + semicolon + instr_list, lambda h,s: [s[1]] + s[3]
@@ -155,27 +155,27 @@ instr_wrapper %= instr + semicolon, lambda h,s: s[1]
 instr %= scope, lambda h,s: s[1]
 instr %= flux_control, lambda h,s: s[1]
 
-instr %= expression, lambda h,s: s[1]
+instr %= expr, lambda h,s: s[1]
 instr %= var_dec, lambda h,s: s[1]
 
-var_dec %= let + var_inicialization_list+ in_ + var_decl_expression, lambda h,s: VarsDeclarationsListNode(s[2], s[4])
+var_dec %= let + var_init_list+ in_ + var_decl_expression, lambda h,s: VarsDeclarationsListNode(s[2], s[4])
 
 var_decl_expression %= scope, lambda h,s: s[1]
 var_decl_expression %= flux_control, lambda h,s: s[1]
-var_decl_expression %= expression, lambda h,s: s[1]
-var_decl_expression %= open_curly_braket + var_dec + closed_curly_braket, lambda h,s: ParenthesisExpr(s[2])
+var_decl_expression %= expr, lambda h,s: s[1]
+var_decl_expression %= open_par + var_dec + closed_par, lambda h,s: ParenthesisExpr(s[2])
 var_decl_expression %= var_dec, lambda h,s: s[1]
 
-var_inicialization_list %= var_initialization, lambda h,s: [s[1]]
-var_inicialization_list %= var_initialization + comma + var_inicialization_list, lambda h,s: [s[1]] + s[3]
+var_init_list %= var_init, lambda h,s: [s[1]]
+var_init_list %= var_init + comma + var_init_list, lambda h,s: [s[1]] + s[3]
 
-var_initialization %= identifier + inicialization + expression, lambda h,s: lambda h,s: VarDeclarationNode(s[1], s[3])
+var_init %= id + init + expr, lambda h,s: lambda h,s: VarDeclarationNode(s[1], s[3])
 
-id_list %= identifier, lambda h,s: [s[1]]
-id_list %= identifier + comma + id_list, lambda h,s: [s[1]] + s[3]
+id_list %= id, lambda h,s: [s[1]]
+id_list %= id + comma + id_list, lambda h,s: [s[1]] + s[3]
 
-identifier %= ID, lambda h,s: s[1]
-identifier %= fully_typed_param, lambda h,s: s[1]
+id %= ID, lambda h,s: s[1]
+id %= fully_typed_param, lambda h,s: s[1]
 
 fully_typed_param %= ID + type_anotation, lambda h,s: s[1] 
 
@@ -183,96 +183,96 @@ type_anotation %= type_asignator + ID, lambda h,s: TypeAnotationNode(s[2])
 
 scope%=open_bracket+instr_list+closed_bracket, lambda h,s: BlockNode(s[2])
 
-expression %= aritmetic_operation, lambda h,s: s[1]
+expr %= arit_oper, lambda h,s: s[1]
 
-expression %= atom + string_operator + expression, lambda h,s: StringSimpleConcatNode(s[1], s[3])
-expression %= atom + string_operator_space + expression, lambda h,s: StringSpaceConcatNode(s[1], s[3])
-expression %= var_asignation, lambda h,s: s[1]
+expr %= atom + string_oper + expr, lambda h,s: StringSimpleConcatNode(s[1], s[3])
+expr %= atom + string_oper_space + expr, lambda h,s: StringSpaceConcatNode(s[1], s[3])
+expr %= var_asig, lambda h,s: s[1]
 
-aritmetic_operation %= term +plus_operator+ aritmetic_operation, lambda h,s: PlusNode(s[1], s[3])
-aritmetic_operation %= term + minus_operator + aritmetic_operation, lambda h,s: MinusNode(s[1], s[3])
-aritmetic_operation %= term, lambda h,s: s[1]
+arit_oper %= term +plus_+ arit_oper, lambda h,s: PlusNode(s[1], s[3])
+arit_oper %= term + minus_ + arit_oper, lambda h,s: MinusNode(s[1], s[3])
+arit_oper %= term, lambda h,s: s[1]
 
-term %= factor + multiplication + term, lambda h,s: StarNode(s[1], s[3])
-term %= factor + division + term, lambda h,s: DivNode(s[1], s[3])
+term %= factor + mult + term, lambda h,s: StarNode(s[1], s[3])
+term %= factor + div + term, lambda h,s: DivNode(s[1], s[3])
 term %= factor, lambda h,s: s[1]
 
 factor %= factor + exponentiation + base_exponent, lambda h,s: PowNode(s[1], s[3])
 factor %= base_exponent, lambda h,s: s[1]
 
 base_exponent %= atom, lambda h,s: s[1]
-base_exponent %= open_curly_braket + aritmetic_operation + closed_curly_braket, lambda h,s: ParenthesisExpr(s[2])
+base_exponent %= open_par + arit_oper + closed_par, lambda h,s: ParenthesisExpr(s[2])
 
 atom %= number, lambda h,s: NumberNode(s[1])
-atom %= function_call, lambda h,s: s[1]
+atom %= func_call, lambda h,s: s[1]
 atom %= var_use, lambda h,s: s[1]
-atom %= vector, lambda h,s: s[1]
-atom %= variable_method, lambda h,s: s[1]
+atom %= vec, lambda h,s: s[1]
+atom %= var_method, lambda h,s: s[1]
 atom %= string_, lambda h,s: StringNode(s[1])
-atom %= type_instanciation, lambda h,s: s[1]
-atom %= boolean_value, lambda h,s: s[1]
+atom %= type_inst, lambda h,s: s[1]
+atom %= bool_val, lambda h,s: s[1]
 
-var_asignation %= var_use + asignation + expression, lambda h,s: VarAssignation(s[1], s[3])
+var_asig %= var_use + assign + expr, lambda h,s: VarAssignation(s[1], s[3])
 
-function_declaration %= function_declaration_id+open_curly_braket +id_list+ closed_curly_braket + function_full_declaration, lambda h,s: FuncFullDeclarationNode(s[1], s[3], s[5])
-function_declaration %= function_declaration_id+open_curly_braket + closed_curly_braket + function_full_declaration, lambda h,s: FuncFullDeclarationNode(s[1], [], s[4])
-function_declaration %= function_declaration_id+open_curly_braket +id_list+ closed_curly_braket + function_full_declaration + semicolon, lambda h,s: FuncFullDeclarationNode(s[1], s[3], s[5])
-function_declaration %= function_declaration_id+open_curly_braket + closed_curly_braket + function_full_declaration + semicolon, lambda h,s: FuncFullDeclarationNode(s[1], [], s[4])
+func_decl %= func_decl_id+open_par +id_list+ closed_par + func_full_decl, lambda h,s: FuncFullDeclarationNode(s[1], s[3], s[5])
+func_decl %= func_decl_id+open_par + closed_par + func_full_decl, lambda h,s: FuncFullDeclarationNode(s[1], [], s[4])
+func_decl %= func_decl_id+open_par +id_list+ closed_par + func_full_decl + semicolon, lambda h,s: FuncFullDeclarationNode(s[1], s[3], s[5])
+func_decl %= func_decl_id+open_par + closed_par + func_full_decl + semicolon, lambda h,s: FuncFullDeclarationNode(s[1], [], s[4])
 
-function_declaration %= function_declaration_id+open_curly_braket +id_list+ closed_curly_braket + function_inline_declaration, lambda h,s: FuncInlineDeclarationNode(s[1], s[3], s[5])
-function_declaration %= function_declaration_id+open_curly_braket + closed_curly_braket + function_inline_declaration, lambda h,s: FuncInlineDeclarationNode(s[1], [], s[4])
+func_decl %= func_decl_id+open_par +id_list+ closed_par + func_inline_decl, lambda h,s: FuncInlineDeclarationNode(s[1], s[3], s[5])
+func_decl %= func_decl_id+open_par + closed_par + func_inline_decl, lambda h,s: FuncInlineDeclarationNode(s[1], [], s[4])
 
-function_declaration_id %= function + ID, lambda h,s: s[2]
+func_decl_id %= func + ID, lambda h,s: s[2]
 
-function_full_declaration %= scope, lambda h,s: s[1]
-function_full_declaration %= type_anotation + scope, lambda h,s: s[2]
+func_full_decl %= scope, lambda h,s: s[1]
+func_full_decl %= type_anotation + scope, lambda h,s: s[2]
 
-function_inline_declaration %= func_arrow + expression +semicolon, lambda h,s: s[2]
-function_inline_declaration %= type_anotation + func_arrow + expression + semicolon, lambda h,s: s[3]
+func_inline_decl %= func_arrow + expr +semicolon, lambda h,s: s[2]
+func_inline_decl %= type_anotation + func_arrow + expr + semicolon, lambda h,s: s[3]
 
-conditional %= if_ + inline_conditional,lambda h,s : s[1]
-conditional %= if_ + full_conditional, lambda h,s :s[1]
+conditional %= if_ + inline_cond,lambda h,s : s[1]
+conditional %= if_ + full_cond, lambda h,s :s[1]
 
-inline_conditional %=  open_curly_braket + conditional_expression + closed_curly_braket + expression + else_statement, lambda h,s: IfNode(s[2], s[4], s[5])
-full_conditional %= open_curly_braket + conditional_expression + closed_curly_braket + scope + else_statement, lambda h,s: IfNode(s[2], s[4], s[5])
+inline_cond %=  open_par + cond_expr + closed_par + expr + else_stat, lambda h,s: IfNode(s[2], s[4], s[5])
+full_cond %= open_par + cond_expr + closed_par + scope + else_stat, lambda h,s: IfNode(s[2], s[4], s[5])
 
-else_statement %= elif_ + inline_conditional ,lambda h,s:s[1]
-else_statement %= elif_ +full_conditional,lambda h,s:s[1]
+else_stat %= elif_ + inline_cond ,lambda h,s:s[1]
+else_stat %= elif_ +full_cond,lambda h,s:s[1]
 
-else_statement %= else_ + inline_else, lambda h,s: s[2]
-else_statement %= else_ + full_else, lambda h,s: s[2]
+else_stat %= else_ + inline_else, lambda h,s: s[2]
+else_stat %= else_ + full_else, lambda h,s: s[2]
 
-inline_else %= expression, lambda h,s: s[1]
+inline_else %= expr, lambda h,s: s[1]
 full_else %= scope, lambda h,s: s[1]
 
-while_loop %= while_ + open_curly_braket + conditional_expression + closed_curly_braket + scope, lambda h,s: WhileLoopNode(s[3], s[5])
+while_loop %= while_ + open_par + cond_expr + closed_par + scope, lambda h,s: WhileLoopNode(s[3], s[5])
 
-for_loop %= for_ + open_curly_braket + identifier + in_ + expression + closed_curly_braket + scope, lambda h,s: ForLoopNode(s[3], s[5], s[7])
+for_loop %= for_ + open_par + id + in_ + expr + closed_par + scope, lambda h,s: ForLoopNode(s[3], s[5], s[7])
 
-conditional_expression %= condition + and_ + conditional_expression, lambda h,s: AndNode(s[1], s[3])
-conditional_expression %= condition + or_ + conditional_expression, lambda h,s: OrNode(s[1], s[3])
-conditional_expression %= not_ + condition, lambda h,s: NotNode(s[2])
-conditional_expression %= condition, lambda h,s: s[1]
+cond_expr %= condition + and_ + cond_expr, lambda h,s: AndNode(s[1], s[3])
+cond_expr %= condition + or_ + cond_expr, lambda h,s: OrNode(s[1], s[3])
+cond_expr %= not_ + condition, lambda h,s: NotNode(s[2])
+cond_expr %= condition, lambda h,s: s[1]
 
-condition %= comparation, lambda h,s: s[1]
-condition %= open_curly_braket + conditional_expression + closed_curly_braket, lambda h,s: ParenthesisExpr(s[2])
-comparation %= expression + gt + expression, lambda h,s: GreaterThatNode(s[1], s[3])
-comparation %= expression + lt + expression, lambda h,s: LessThatNode(s[1], s[3])
-comparation %= expression + gte + expression, lambda h,s: GreaterOrEqualThatNode(s[1], s[3])
-comparation %= expression + lte + expression, lambda h,s: LessOrEqualThatNode(s[1], s[3])
-comparation %= expression + eq + expression, lambda h,s: EqualNode(s[1], s[3])
+condition %= comp, lambda h,s: s[1]
+condition %= open_par + cond_expr + closed_par, lambda h,s: ParenthesisExpr(s[2])
+comp %= expr + gt + expr, lambda h,s: GreaterThatNode(s[1], s[3])
+comp %= expr + lt + expr, lambda h,s: LessThatNode(s[1], s[3])
+comp %= expr + gte + expr, lambda h,s: GreaterOrEqualThatNode(s[1], s[3])
+comp %= expr + lte + expr, lambda h,s: LessOrEqualThatNode(s[1], s[3])
+comp %= expr + eq + expr, lambda h,s: EqualNode(s[1], s[3])
 
-boolean_value %= true, lambda h,s: BooleanNode(s[1])
-boolean_value %= false, lambda h,s: BooleanNode(s[1])
+bool_val %= true, lambda h,s: BooleanNode(s[1])
+bool_val %= false, lambda h,s: BooleanNode(s[1])
 
-type_declaration %= type + ID + constructor + decl_body, lambda h,s: TypeDeclarationNode(s[2], s[3], s[4])
+type_decl %= type + ID + constructor + decl_body, lambda h,s: TypeDeclarationNode(s[2], s[3], s[4])
 
-type_declaration %= type + ID + constructor + inherits_type + decl_body, lambda h,s: TypeDeclarationNode(s[2], s[3], s[5], s[4])
-type_declaration %= type + ID + constructor + decl_body + semicolon, lambda h,s: TypeDeclarationNode(s[2], s[3], [])
-type_declaration %= type + ID + constructor + inherits_type + decl_body + semicolon, lambda h,s: TypeDeclarationNode(s[2], s[3], s[5], s[4])
+type_decl %= type + ID + constructor + inherits_type + decl_body, lambda h,s: TypeDeclarationNode(s[2], s[3], s[5], s[4])
+type_decl %= type + ID + constructor + decl_body + semicolon, lambda h,s: TypeDeclarationNode(s[2], s[3], [])
+type_decl %= type + ID + constructor + inherits_type + decl_body + semicolon, lambda h,s: TypeDeclarationNode(s[2], s[3], s[5], s[4])
 
-constructor %= open_curly_braket + param_list + closed_curly_braket, lambda h,s: s[2]
-constructor %= open_curly_braket + closed_curly_braket, lambda h,s: []
+constructor %= open_par + param_list + closed_par, lambda h,s: s[2]
+constructor %= open_par + closed_par, lambda h,s: []
 constructor %= G.Epsilon, lambda h,s: []
 
 inherits_type %= inherits + ID + constructor, lambda h,s: TypeInheritNode(s[2], s[3])
@@ -280,62 +280,62 @@ inherits_type %= inherits + ID + constructor, lambda h,s: TypeInheritNode(s[2], 
 decl_body %= open_bracket+closed_bracket, lambda h,s: []
 decl_body %= open_bracket+ decl_list + closed_bracket, lambda h,s: s[2]
 
-decl_list %= declaration + semicolon, lambda h,s: [s[1]]
-decl_list %= declaration + semicolon+decl_list, lambda h,s: [s[1]] + s[3]
+decl_list %= decl + semicolon, lambda h,s: [s[1]]
+decl_list %= decl + semicolon+decl_list, lambda h,s: [s[1]] + s[3]
 
-declaration %= atribute_declaration, lambda h,s: s[1]
-declaration %= method_declaration, lambda h,s: s[1]
+decl %= attr_decl, lambda h,s: s[1]
+decl %= method_decl, lambda h,s: s[1]
 
-atribute_declaration %= identifier + inicialization + expression, lambda h,s: AttrDeclarationNode(s[1], None, s[3])
+attr_decl %= id + init + expr, lambda h,s: AttrDeclarationNode(s[1], None, s[3])
 
-method_declaration %= ID + open_curly_braket + id_list + closed_curly_braket + func_arrow + expression, lambda h,s: FuncInlineDeclarationNode(s[1], s[3], s[6])
-method_declaration %= ID + open_curly_braket + id_list + closed_curly_braket + function_full_declaration, lambda h,s: FuncFullDeclarationNode(s[1], s[3], s[5])
+method_decl %= ID + open_par + id_list + closed_par + func_arrow + expr, lambda h,s: FuncInlineDeclarationNode(s[1], s[3], s[6])
+method_decl %= ID + open_par + id_list + closed_par + func_full_decl, lambda h,s: FuncFullDeclarationNode(s[1], s[3], s[5])
 
-method_declaration %= ID + open_curly_braket + closed_curly_braket + func_arrow + expression, lambda h,s: FuncInlineDeclarationNode(s[1], [], s[5])
-method_declaration %= ID + open_curly_braket + closed_curly_braket + function_full_declaration, lambda h,s: FuncFullDeclarationNode(s[1], [], s[4])
+method_decl %= ID + open_par + closed_par + func_arrow + expr, lambda h,s: FuncInlineDeclarationNode(s[1], [], s[5])
+method_decl %= ID + open_par + closed_par + func_full_decl, lambda h,s: FuncFullDeclarationNode(s[1], [], s[4])
 
-function_call %= ID + open_curly_braket + param_list + closed_curly_braket, lambda h,s: CallNode(s[1], s[3])
-function_call %= ID + open_curly_braket + closed_curly_braket, lambda h,s: CallNode(s[1], [])
+func_call %= ID + open_par + param_list + closed_par, lambda h,s: CallNode(s[1], s[3])
+func_call %= ID + open_par + closed_par, lambda h,s: CallNode(s[1], [])
 
-type_instanciation %= new + ID + open_curly_braket + param_list + closed_curly_braket, lambda h,s: InstantiateTypeNode(s[2], s[4])
-type_instanciation %= new + ID + open_curly_braket + closed_curly_braket, lambda h,s: InstantiateTypeNode(s[2], [])
+type_inst %= new + ID + open_par + param_list + closed_par, lambda h,s: InstantiateTypeNode(s[2], s[4])
+type_inst %= new + ID + open_par + closed_par, lambda h,s: InstantiateTypeNode(s[2], [])
 
 param_list %= param, lambda h,s: [s[1]]
 param_list %= param + comma + param_list, lambda h,s: [s[1]] + s[3]
 
-param %= expression, lambda h,s: s[1]
+param %= expr, lambda h,s: s[1]
 
 var_use %= ID, lambda h,s: VariableNode(s[1])
-var_use %= atom+open_square_braket+expression+close_square_braket, lambda h,s: VecInstNode(s[1], s[3])
-var_use %= variable_atribute, lambda h,s: s[1]
+var_use %= atom+open_square_braket+expr+close_square_braket, lambda h,s: VecInstNode(s[1], s[3])
+var_use %= var_attr, lambda h,s: s[1]
 
-variable_atribute %= ID + dot + ID, lambda h,s: CallTypeAttr(s[1], s[3])
-variable_atribute %= ID + dot + variable_atribute, lambda h,s: CallTypeAttr(s[1], s[3])
+var_attr %= ID + dot + ID, lambda h,s: CallTypeAttr(s[1], s[3])
+var_attr %= ID + dot + var_attr, lambda h,s: CallTypeAttr(s[1], s[3])
 
-variable_method %= ID + dot + function_call, lambda h,s: CallTypeFunc(s[1], s[3])
+var_method %= ID + dot + func_call, lambda h,s: CallTypeFunc(s[1], s[3])
 
 flux_control %= while_loop, lambda h,s: s[1]
 flux_control %= conditional, lambda h,s: s[1]
 flux_control %= for_loop, lambda h,s: s[1]
 
-protocol_declaration %= protocol + ID + protocol_body, lambda h,s: ProtocolNode(s[2], s[3])
-protocol_declaration %= protocol + ID + protocol_body + semicolon, lambda h,s: ProtocolNode(s[2], s[3])
-protocol_declaration %= protocol + ID + extends + ID + protocol_body, lambda h,s: ProtocolNode(s[2], s[5], s[4])
-protocol_declaration %= protocol + ID + extends + ID + protocol_body + semicolon, lambda h,s: ProtocolNode(s[2], s[5], s[4])
+protocol_decl %= protocol + ID + protocol_body, lambda h,s: ProtocolNode(s[2], s[3])
+protocol_decl %= protocol + ID + protocol_body + semicolon, lambda h,s: ProtocolNode(s[2], s[3])
+protocol_decl %= protocol + ID + extends + ID + protocol_body, lambda h,s: ProtocolNode(s[2], s[5], s[4])
+protocol_decl %= protocol + ID + extends + ID + protocol_body + semicolon, lambda h,s: ProtocolNode(s[2], s[5], s[4])
 
 protocol_body %= open_bracket+virtual_method_list+closed_bracket, lambda h,s: s[2]
 
 virtual_method_list %= virtual_method + semicolon, lambda h,s: s[1]
 virtual_method_list %= virtual_method + semicolon + virtual_method_list, lambda h,s: [s[1]] + s[3]
 
-virtual_method %= ID + open_curly_braket+closed_curly_braket + type_anotation, lambda h,s: ProtocolMethod(s[1], s[4], [])
-virtual_method %= ID + open_curly_braket+fully_typed_params+closed_curly_braket + type_anotation, lambda h,s: ProtocolMethod(s[1], s[5], s[3])
+virtual_method %= ID + open_par+closed_par + type_anotation, lambda h,s: ProtocolMethod(s[1], s[4], [])
+virtual_method %= ID + open_par+fully_typed_params+closed_par + type_anotation, lambda h,s: ProtocolMethod(s[1], s[5], s[3])
 
 fully_typed_params %= fully_typed_param, lambda h,s: s[1]
 fully_typed_params %= fully_typed_param + comma + fully_typed_params, lambda h,s: [s[1]] + s[3]
 
-vector %= open_square_braket + vector_decl + close_square_braket, lambda h,s: VecDecExplSyntaxNode(s[2])
+vec %= open_square_braket + vec_decl + close_square_braket, lambda h,s: VecDecExplSyntaxNode(s[2])
 
-vector_decl %= param_list, lambda h,s: s[1]
-vector_decl %= expression + gen_pattern_symbol + identifier + in_ + expression, lambda h,s: VecDecImplSyntaxNode(s[1], s[3], s[5])
+vec_decl %= param_list, lambda h,s: s[1]
+vec_decl %= expr + gen_pattern_symbol + id + in_ + expr, lambda h,s: VecDecImplSyntaxNode(s[1], s[3], s[5])
 #endregion

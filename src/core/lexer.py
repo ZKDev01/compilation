@@ -87,7 +87,7 @@ STRINGS_VALUES = f'(\")({printables})*(\")'
 INTEGER = f'({digits})(.|{EPSILON})({digits})*'
 SPACE = '(\n|\t|\f|\r|\v| )(\n|\t|\f|\r|\v| )*'
 
-identifier = f'({uppers}|{lowers}|_)({uppers}|{lowers}|{digits}|_)*'
+id = f'({uppers}|{lowers}|_)({uppers}|{lowers}|{digits}|_)*'
 
 def build_lexer():
   table = []
@@ -95,13 +95,13 @@ def build_lexer():
   table.append(('space',SPACE))
   table.append((number, INTEGER))
 
-  table.append((multiplication,r'\*'))
-  table.append((plus_operator,'+'))
-  table.append((open_curly_braket,r'\('))
-  table.append((closed_curly_braket,r'\)'))
+  table.append((mult,r'\*'))
+  table.append((plus_,'+'))
+  table.append((open_par,r'\('))
+  table.append((closed_par,r'\)'))
   table.append((semicolon,';'))
-  table.append((minus_operator,'-'))
-  table.append((division,'/'))
+  table.append((minus_,'-'))
+  table.append((div,'/'))
   table.append((open_bracket,'{'))
   table.append((closed_bracket,'}'))
   table.append((and_,'&'))
@@ -117,12 +117,12 @@ def build_lexer():
   table.append((open_square_braket,'['))
   table.append((close_square_braket,']'))
   table.append((gen_pattern_symbol,r'\|\|'))
-  table.append((string_operator_space,'@@'))
-  table.append((string_operator,'@'))
-  table.append((asignation,':='))
-  table.append((inicialization,'='))
+  table.append((string_oper_space,'@@'))
+  table.append((string_oper,'@'))
+  table.append((assign,':='))
+  table.append((init,'='))
   table.append((comma,','))
-  table.append((module_operation,'%'))
+  table.append((module_oper,'%'))
   table.append((func_arrow,'=>'))
   table.append((type_asignator,':'))
   table.append((dot,'.'))
@@ -132,7 +132,7 @@ def build_lexer():
   table.append((for_,'for'))
   table.append((let,'let'))
   table.append((in_,'in'))
-  table.append((function,'function'))
+  table.append((func,'function'))
   table.append((if_,'if'))
   table.append((elif_,'elif'))
   table.append((else_,'else'))
@@ -142,7 +142,7 @@ def build_lexer():
   table.append((type,'type'))
   table.append((inherits,'inherits'))
   table.append((string_,STRINGS_VALUES))
-  table.append((ID,identifier))
+  table.append((ID,id))
 
   return Lexer(table,G.EOF)
 
